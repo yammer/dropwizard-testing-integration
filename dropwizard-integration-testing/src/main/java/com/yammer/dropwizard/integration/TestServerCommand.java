@@ -22,6 +22,7 @@ import java.lang.management.ManagementFactory;
 import static com.google.common.base.Preconditions.checkArgument;
 
 public class TestServerCommand<T extends Configuration> extends EnvironmentCommand<T> {
+    public static final String COMMAND_LINE_NAME = "test-server";
     private final static Logger logger = LoggerFactory.getLogger(ServerCommand.class);
     private final Class<T> configurationClass;
     private Server server;
@@ -29,7 +30,7 @@ public class TestServerCommand<T extends Configuration> extends EnvironmentComma
 
 
     public TestServerCommand(Service<T> service, Class<T> configurationClass) {
-        super(service, "test-server", "Test version of the server command, which enables server shutdown.");
+        super(service, COMMAND_LINE_NAME, "Test version of the server command, which enables server shutdown.");
         this.configurationClass = configurationClass;
     }
 
