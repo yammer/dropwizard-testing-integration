@@ -1,4 +1,4 @@
-package com.yammer.dropwizard.integration;
+package com.yammer.dropwizard.testing.integration;
 
 
 import com.yammer.dropwizard.Service;

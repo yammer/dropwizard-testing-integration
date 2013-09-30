@@ -1,4 +1,4 @@
-package com.yammer.dropwizard.integration;
+package com.yammer.dropwizard.testing.integration;
 
 
 import com.google.common.collect.Lists;
@@ -14,7 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.yammer.dropwizard.integration.LifecycleServerCommand.COMMAND_LINE_NAME;
+import static com.yammer.dropwizard.testing.integration.LifecycleServerCommand.COMMAND_LINE_NAME;
 
 /**
  * A convenience class for use in integration tests. When provided with the service under test it
