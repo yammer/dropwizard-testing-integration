@@ -30,7 +30,7 @@ public class TestServer<T extends Configuration, S extends Service<T>> {
     private final String[] supportingFilesPaths;
     private final Class<?> testClass;
     private boolean wasRun = false;
-
+             // TODO clean up the parameters, there seems to be one to many
     /* package */ TestServer(Class<?> testClass, LifecycleService<T, S> testServer, final String configFile,
                              String... additionalFiles) throws Exception {
         checkNotNull(testServer);
