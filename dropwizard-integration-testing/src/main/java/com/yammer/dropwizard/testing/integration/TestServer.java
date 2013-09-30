@@ -48,10 +48,9 @@ public class TestServer<T extends Configuration, S extends Service<T>> {
      * @param serviceUnderTest an instance of {@link com.yammer.dropwizard.Service} under test. As explained in the documentation for
      * {@link LifecycleService#LifecycleService(com.yammer.dropwizard.Service)} the {@link com.yammer.dropwizard.Service#run(String[])} method should not
      *                         have been executed.
-     * @param configFile the filename of the file to be parsed into the configuration class {@param T}. It expected to be located in the resources of the
-     *                   test, in the same package.
-     * @param additionalFiles filenames of additional file to be available at the same path as {@param configFile} when the server is starting. Likewise,
-     *                        they are expected to be found in the resources for the class under test.
+     * @param configFile the path to the config file
+     * @param additionalFiles filenames of additional files to be available at the same path as the server run directory. They are expected to be found in
+     *                        the resources for the class under test.
      * @param <T>
      * @param <S>
      * @return
@@ -72,10 +71,10 @@ public class TestServer<T extends Configuration, S extends Service<T>> {
         if (wasRun) {
             throw new IllegalStateException("The server can be started only once");
         }
-        wasRun = true;
         setUpFiles(supportingFilesPaths);
         final String[] runArgs = {COMMAND_LINE_NAME, configFilePath};
         serviceLifecycleWrapper.run(runArgs);
+        wasRun = true;
     }
 
     public boolean isRunning() {

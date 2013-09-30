@@ -2,9 +2,9 @@ package com.yammer.dropwizard.testing.integration;
 
 
 import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientHandlerException;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -15,10 +15,9 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
 
-@Ignore
 public class TestServerIntegrationTest {
     private static final String TEST_SERVICE_URL = "http://localhost:20190";
-    private static final String TEST_CONFIG = "testConfiguration.yml";
+    private static final String TEST_CONFIG = TestServerIntegrationTest.class.getResource("testConfiguration.yml").getPath();
     private static final String VALUE_FILE = "value.txt";
     private TestClient testClient;
     private TestServer<TestConfiguration, TestService> testServer;
@@ -32,16 +31,17 @@ public class TestServerIntegrationTest {
 
     @After
     public void tearDown() throws Exception {
-        testServer.stop();
+        if (testServer.isRunning()) {
+            testServer.stop();
+        }
     }
 
     @Test
     public void when_test_server_started_then_files_loaded_correctly() throws IOException {
-        System.out.println(testClient.getValue()); // TODO remove
         assertThat(testClient.getValue(), is(equalTo(getExpectedValue())));
     }
 
-    @Test
+    @Test(expected = ClientHandlerException.class)
     public void after_server_stopped_it_is_no_longer_running() throws Exception {
         testServer.stop();
 
