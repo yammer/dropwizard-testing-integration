@@ -4,7 +4,6 @@ package com.yammer.dropwizard.integration;
 import com.google.common.collect.Lists;
 import com.yammer.dropwizard.Service;
 import com.yammer.dropwizard.config.Configuration;
-import static com.yammer.dropwizard.integration.TestServerCommand.COMMAND_LINE_NAME;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,23 +14,25 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.yammer.dropwizard.integration.LifecycleServerCommand.COMMAND_LINE_NAME;
 
-public class IntegrationTestServer<T extends Configuration, S extends Service<T>> {
-    private final ServiceLifecycleWrapper<T, S> serviceLifecycleWrapper;
+/**
+ * A convenience class for use in integration tests. When provided with the service under test it
+ * allows for its start and shutdown. Additionally, it ensures that the config file and additional files
+ * are copied from the tests resources folder to the directory from which the service is being run.
+ * @param <T>
+ * @param <S>
+ */
+public class TestServer<T extends Configuration, S extends Service<T>> {
+    private final LifecycleService<T, S> serviceLifecycleWrapper;
     private final List<String> filesToBeDeleted = Lists.newArrayList();
     private final String configFilePath;
     private final String[] supportingFilesPaths;
     private final Class<?> testClass;
     private boolean wasRun = false;
 
-    public static <T extends Configuration, S extends Service<T>> IntegrationTestServer<T, S> create(Class<?> testClass, S testServer,
-                                                                                            final String configFile,
-                                                                             String... additionalFiles) throws Exception {
-        return new IntegrationTestServer<>(testClass, new ServiceLifecycleWrapper<>(testServer), configFile, additionalFiles);
-    }
-
-    /* package */ IntegrationTestServer(Class<?> testClass, ServiceLifecycleWrapper<T, S> testServer, final String configFile,
-                                        String... additionalFiles) throws Exception {
+    /* package */ TestServer(Class<?> testClass, LifecycleService<T, S> testServer, final String configFile,
+                             String... additionalFiles) throws Exception {
         checkNotNull(testServer);
         checkNotNull(configFile);
         checkNotNull(testClass);
@@ -39,6 +40,26 @@ public class IntegrationTestServer<T extends Configuration, S extends Service<T>
         this.configFilePath = configFile;
         this.supportingFilesPaths = Arrays.copyOf(additionalFiles, additionalFiles.length);
         this.testClass = testClass;
+    }
+
+    /**
+     *
+     * @param testClass the class of the test
+     * @param serviceUnderTest an instance of {@link com.yammer.dropwizard.Service} under test. As explained in the documentation for
+     * {@link LifecycleService#LifecycleService(com.yammer.dropwizard.Service)} the {@link com.yammer.dropwizard.Service#run(String[])} method should not
+     *                         have been executed.
+     * @param configFile the filename of the file to be parsed into the configuration class {@param T}. It expected to be located in the resources of the
+     *                   test, in the same package.
+     * @param additionalFiles filenames of additional file to be available at the same path as {@param configFile} when the server is starting. Likewise,
+     *                        they are expected to be found in the resources for the class under test.
+     * @param <T>
+     * @param <S>
+     * @return
+     * @throws Exception
+     */
+    public static <T extends Configuration, S extends Service<T>> TestServer<T, S>
+    create(Class<?> testClass, S serviceUnderTest, final String configFile, String... additionalFiles) throws Exception {
+        return new TestServer<>(testClass, new LifecycleService<>(serviceUnderTest), configFile, additionalFiles);
     }
 
     private void prepareFileForTest(String name) throws IOException {
@@ -57,7 +78,7 @@ public class IntegrationTestServer<T extends Configuration, S extends Service<T>
         serviceLifecycleWrapper.run(runArgs);
     }
 
-    public boolean isStarted() {
+    public boolean isRunning() {
         return wasRun && serviceLifecycleWrapper.isRunning();
     }
 
@@ -75,7 +96,7 @@ public class IntegrationTestServer<T extends Configuration, S extends Service<T>
     }
 
     public void stop() throws Exception {
-        if (!isStarted()) {
+        if (!isRunning()) {
             throw new IllegalStateException("Cannot stop a server that has not been started");
         }
         serviceLifecycleWrapper.stop();
