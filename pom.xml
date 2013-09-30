@@ -3,14 +3,85 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.yammer.secretie</groupId>
-        <artifactId>secretie-parent</artifactId>
-        <version>1.0.1-SNAPSHOT</version>
+        <groupId>com.yammer.coreservices</groupId>
+        <artifactId>coreservices-parent</artifactId>
+        <version>1.0.6</version>
     </parent>
+
+    <properties>
+        <junit.version>4.11</junit.version>
+        <mockito.version>1.8.4</mockito.version>
+        <hamcrest.version>1.3</hamcrest.version>
+        <dropwizard.version>0.6.2</dropwizard.version>
+    </properties>
+
+    <groupId>com.yammer.dropwizard.testing</groupId>
+    <artifactId>dropwizard-testing-integration</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>jar</packaging>
 
     <name>Dropwizard Integraton Testing</name>
     <description>Utilites and setup for running full stack integration tests using dropwizard.</description>
-    <artifactId>dropwizard-integration-testing</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.yammer.dropwizard</groupId>
+            <artifactId>dropwizard-core</artifactId>
+            <version>${dropwizard.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.yammer.dropwizard</groupId>
+            <artifactId>dropwizard-client</artifactId>
+            <version>${dropwizard.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <type>jar</type>
+            <scope>test</scope>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>${mockito.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-all</artifactId>
+            <version>${hamcrest.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <scm>
+        <connection>scm:git:git://github.int.yammer.com/yammer/dropwizard-testing-integration.git</connection>
+        <developerConnection>scm:git:git@github.int.yammer.com:yammer/dropwizard-testing-integration.git</developerConnection>
+        <url>http://github.int.yammer.com/yammer/dropwizard-testing-integration/</url>
+        <tag>HEAD</tag>
+    </scm>
+
+    <developers>
+        <developer>
+            <name>Michal Rutkowski</name>
+            <email>mrutkowski@yammer-inc.com</email>
+            <timezone>0</timezone>
+        </developer>
+    </developers>
+
+
+    <repositories>
+        <repository>
+            <id>maven.int.yammer.com</id>
+            <url>http://maven.int.yammer.com/nexus/content/groups/public/</url>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
+        </repository>
+    </repositories>
 
 </project>
 
