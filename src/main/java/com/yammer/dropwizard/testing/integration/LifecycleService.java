@@ -40,7 +40,7 @@ public class LifecycleService<T extends Configuration, S extends Service<T>> {
         final Bootstrap<T> bootstrap = new Bootstrap<>(serviceUnderTest);
         bootstrap.addCommand(testServerCommand);
         serviceUnderTest.initialize(bootstrap);
-        final Cli cli = new Cli(this.getClass(), bootstrap);
+        final Cli cli = new Cli(serviceUnderTest.getClass(), bootstrap);
         cli.run(arguments);
     }
 
