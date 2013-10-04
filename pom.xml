@@ -17,7 +17,7 @@
 
     <groupId>com.yammer.dropwizard.testing</groupId>
     <artifactId>dropwizard-testing-integration</artifactId>
-    <version>0.0.3</version>
+    <version>0.0.4-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>Dropwizard Integraton Testing</name>
@@ -60,7 +60,7 @@
         <connection>scm:git:git://github.int.yammer.com/yammer/dropwizard-testing-integration.git</connection>
         <developerConnection>scm:git:git@github.int.yammer.com:yammer/dropwizard-testing-integration.git</developerConnection>
         <url>http://github.int.yammer.com/yammer/dropwizard-testing-integration/</url>
-        <tag>v0.0.3</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <developers>
