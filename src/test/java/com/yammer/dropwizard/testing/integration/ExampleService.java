@@ -26,15 +26,15 @@ import javax.ws.rs.Produces;
 import java.io.File;
 import java.util.Scanner;
 
-public class TestService extends Service<TestConfiguration> {
+public class ExampleService extends Service<ExampleConfiguration> {
 
     @Override
-    public void initialize(Bootstrap<TestConfiguration> bootstrap) {
-        bootstrap.setName("test-service");
+    public void initialize(Bootstrap<ExampleConfiguration> bootstrap) {
+        bootstrap.setName("example-service");
     }
 
     @Override
-    public void run(TestConfiguration configuration, Environment environment) throws Exception {
+    public void run(ExampleConfiguration configuration, Environment environment) throws Exception {
         File valueFile = new File(configuration.getFilename());
         Scanner valueScanner = new Scanner(valueFile);
         final String value = valueScanner.next();

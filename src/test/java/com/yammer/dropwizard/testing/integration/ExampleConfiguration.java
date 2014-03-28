@@ -18,7 +18,7 @@ package com.yammer.dropwizard.testing.integration;
 import com.yammer.dropwizard.config.Configuration;
 
 
-public class TestConfiguration extends Configuration {
+public class ExampleConfiguration extends Configuration {
     private String filename;
 
     public String getFilename() {

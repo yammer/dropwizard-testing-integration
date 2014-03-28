@@ -34,14 +34,14 @@ public class TestServerIntegrationTest {
     private static final String TEST_SERVICE_URL = "http://localhost:20190";
     private static final String TEST_CONFIG = TestServerIntegrationTest.class.getResource("testConfiguration.yml").getPath();
     private static final String VALUE_FILE = "value.txt";
-    private TestClient testClient;
-    private TestServer<TestConfiguration, TestService> testServer;
+    private ExampleClient testClient;
+    private TestServer<ExampleConfiguration, ExampleService> testServer;
 
     @Before
     public void setup() throws Exception {
-        testServer = TestServer.create(TestServerIntegrationTest.class, new TestService(), TEST_CONFIG, VALUE_FILE);
+        testServer = TestServer.create(TestServerIntegrationTest.class, new ExampleService(), TEST_CONFIG, VALUE_FILE);
         testServer.start();
-        testClient = new TestClient(new Client(), TEST_SERVICE_URL);
+        testClient = new ExampleClient(new Client(), TEST_SERVICE_URL);
     }
 
     @After
@@ -67,7 +67,7 @@ public class TestServerIntegrationTest {
     public void after_server_stopped_a_new_one_can_be_started() throws Exception {
         testServer.stop();
 
-        testServer = TestServer.create(TestServerIntegrationTest.class, new TestService(), TEST_CONFIG, VALUE_FILE);
+        testServer = TestServer.create(TestServerIntegrationTest.class, new ExampleService(), TEST_CONFIG, VALUE_FILE);
         testServer.start();
 
         testClient.getValue();

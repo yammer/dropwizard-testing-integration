@@ -16,9 +16,9 @@ i.e., the Service is started a call from the Client is issued to the Service
 and a result from the API package is returned. Finally, the service is stopped.
 
 The package provides three classes:
-- TestService - a utility class that creates a server that can be started and stopped. Additionally it can prepare files for test.
+- TestServer - a utility class that creates a server that can be started and stopped. Additionally it can prepare files for test.
 - LifecycleService - a wrapper around the dropwizard service class which enables its lifecycle to be managed
-- LifecycleServerCommand - the substitute for the ServerCommand which enables lifcycle management
+- LifecycleServerCommand - the substitute for the ServerCommand which enables lifecycle management
 
 To use the utilities include the following dependency in your pom
 
@@ -28,4 +28,5 @@ To use the utilities include the following dependency in your pom
                 <version>0.0.3</version>
             </dependency>
 
-The `TestServiceIntegrationTest` is an example of how the tools can be used to write an integration test.
+The `com.yammer.dropwizard.testing.integration.TestServiceIntegrationTest` is an example of how the tools can be used to write an integration test. It uses
+the provided `ExampleService` dropwizard service.
