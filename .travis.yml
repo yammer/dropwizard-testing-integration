@@ -1,0 +1,13 @@
+language: java
+
+script: 'mvn verify deploy --settings maven_deploy_settings.xml'
+
+jdk:
+  - oraclejdk7
+  - openjdk7
+
+notifications:
+  email:
+    recipients:
+      - yammer-sonatype@microsoft.com
+
