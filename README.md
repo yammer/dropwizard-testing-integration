@@ -25,7 +25,7 @@ To use the utilities include the following dependency in your pom
             <dependency>
                 <groupId>com.yammer.dropwizard.testing</groupId>
                 <artifactId>dropwizard-testing-integration</artifactId>
-                <version>0.0.3</version>
+                <version>0.0.6</version>
             </dependency>
 
 The `com.yammer.dropwizard.testing.integration.TestServiceIntegrationTest` is an example of how the tools can be used to write an integration test. It uses
