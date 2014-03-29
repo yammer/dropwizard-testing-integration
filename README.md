@@ -30,3 +30,5 @@ To use the utilities include the following dependency in your pom
 
 The `com.yammer.dropwizard.testing.integration.TestServiceIntegrationTest` is an example of how the tools can be used to write an integration test. It uses
 the provided `ExampleService` dropwizard service.
+
+**NOTE** that the example starts and stops the dropwizard instance for each test. On larger test suites it might be useful to do this once (in the `@BeforeClass` and `@AfterClass` methods) and use a test endpoint for resetting state between tests. Extra care should be taken with respect to asynchronous tasks - Guava's `MoreExecutors.sameThreadExecutor()` may come in handy.
