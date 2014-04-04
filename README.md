@@ -1,4 +1,4 @@
-Dropwizar Integration Testing [![Build Status](https://travis-ci.org/yammer/dropwizard-testing-integration.png)](https://travis-ci.org/yammer/dropwizard-testing-integration)
+Dropwizard Integration Testing [![Build Status](https://travis-ci.org/yammer/dropwizard-testing-integration.png)](https://travis-ci.org/yammer/dropwizard-testing-integration)
 
 dropwizard-testing-integration
 ==============================
