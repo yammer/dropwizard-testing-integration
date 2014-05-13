@@ -30,7 +30,7 @@
 
     <groupId>com.yammer.dropwizard.testing</groupId>
     <artifactId>dropwizard-testing-integration</artifactId>
-    <version>0.0.7-SNAPSHOT</version>
+    <version>0.0.8-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <properties>
@@ -309,7 +309,7 @@
                 <version>1.0.1</version>
                 <configuration>
                     <rules>
-                        <DependencyConvergence/>
+                        <DependencyConvergence />
                     </rules>
                 </configuration>
                 <executions>
