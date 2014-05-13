@@ -37,7 +37,8 @@
         <junit.version>4.11</junit.version>
         <mockito.version>1.8.4</mockito.version>
         <hamcrest.version>1.3</hamcrest.version>
-        <dropwizard.version>0.6.2</dropwizard.version>
+        <dropwizard.version>0.6.7</dropwizard.version>
+        <jackson.core.version>2.1.4</jackson.core.version>
         <maven-gpg-plugin.version>1.4</maven-gpg-plugin.version>
     </properties>
 
@@ -46,11 +47,23 @@
             <groupId>com.yammer.dropwizard</groupId>
             <artifactId>dropwizard-core</artifactId>
             <version>${dropwizard.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-core</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.yammer.dropwizard</groupId>
             <artifactId>dropwizard-client</artifactId>
             <version>${dropwizard.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-core</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -71,6 +84,11 @@
             <artifactId>hamcrest-all</artifactId>
             <version>${hamcrest.version}</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>${jackson.core.version}</version>
         </dependency>
     </dependencies>
 
@@ -201,7 +219,27 @@
                     <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>1.0.1</version>
+                <configuration>
+                    <rules>
+                        <DependencyConvergence/>
+                    </rules>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>enforce</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <phase>validate</phase>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
+
     </build>
 
 </project>
