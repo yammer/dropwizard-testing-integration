@@ -15,16 +15,14 @@
  */
 package com.yammer.dropwizard.testing.integration;
 
-import com.yammer.dropwizard.Service;
-import com.yammer.dropwizard.cli.EnvironmentCommand;
-import com.yammer.dropwizard.cli.ServerCommand;
-import com.yammer.dropwizard.config.Configuration;
-import com.yammer.dropwizard.config.Environment;
-import com.yammer.dropwizard.config.EnvironmentFriend;
-import com.yammer.dropwizard.config.ServerFactory;
-import com.yammer.dropwizard.lifecycle.ServerLifecycleListener;
-import com.yammer.metrics.HealthChecks;
-import com.yammer.metrics.core.HealthCheck;
+import io.dropwizard.Application;
+import io.dropwizard.Configuration;
+import io.dropwizard.cli.EnvironmentCommand;
+import io.dropwizard.cli.ServerCommand;
+import io.dropwizard.lifecycle.ServerLifecycleListener;
+import io.dropwizard.server.DefaultServerFactory;
+import io.dropwizard.server.ServerFactory;
+import io.dropwizard.setup.Environment;
 import net.sourceforge.argparse4j.inf.Namespace;
 import org.eclipse.jetty.server.Server;
 import org.slf4j.Logger;
@@ -41,10 +39,10 @@ public class LifecycleServerCommand<T extends Configuration> extends Environment
     private final static Logger logger = LoggerFactory.getLogger(ServerCommand.class);
     private final Class<T> configurationClass;
     private Server server;
-    private EnvironmentFriend startUpEnvironment;
+    private Environment startUpEnvironment;
 
 
-    public LifecycleServerCommand(Service<T> service, Class<T> configurationClass) {
+    public LifecycleServerCommand(Application<T> service, Class<T> configurationClass) {
         super(service, COMMAND_LINE_NAME, "Test version of the server command, which enables server shutdown.");
         this.configurationClass = configurationClass;
     }
@@ -60,16 +58,13 @@ public class LifecycleServerCommand<T extends Configuration> extends Environment
 
     @Override
     protected void run(Environment environment, Namespace namespace, T configuration) throws Exception {
-        this.startUpEnvironment = new EnvironmentFriend(environment); // remember the startup environment to enable full shutdown
+        this.startUpEnvironment = environment; // remember the startup environment to enable full shutdown
 
-        this.server = new ServerFactory(configuration.getHttpConfiguration(),
-                environment.getName()).buildServer(environment);
+        this.server = configuration.getServerFactory().build(environment);
 
         try {
+            environment.lifecycle().attach(server);
             server.start();
-            for (ServerLifecycleListener listener : environment.getServerListeners()) {
-                listener.serverStarted(server);
-            }
         } catch (Exception e) {
             logger.error("Unable to start server, shutting down", e);
             server.stop();
@@ -98,8 +93,8 @@ public class LifecycleServerCommand<T extends Configuration> extends Environment
     }
 
     private void unRegisterHealthChecks() {
-        for (HealthCheck healthCheck : startUpEnvironment.getHealthChecks()) {
-            HealthChecks.defaultRegistry().unregister(healthCheck);
+        for (String healthCheck : startUpEnvironment.healthChecks().getNames()) {
+            startUpEnvironment.healthChecks().unregister(healthCheck);
         }
     }
 
