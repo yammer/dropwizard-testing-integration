@@ -17,8 +17,8 @@ package com.yammer.dropwizard.testing.integration;
 
 
 import com.google.common.collect.Lists;
-import com.yammer.dropwizard.Service;
-import com.yammer.dropwizard.config.Configuration;
+import io.dropwizard.Application;
+import io.dropwizard.Configuration;
 
 import java.io.File;
 import java.io.IOException;
@@ -38,7 +38,7 @@ import static com.yammer.dropwizard.testing.integration.LifecycleServerCommand.C
  * @param <T>
  * @param <S>
  */
-public class TestServer<T extends Configuration, S extends Service<T>> {
+public class TestServer<T extends Configuration, S extends Application<T>> {
     private final LifecycleService<T, S> serviceLifecycleWrapper;
     private final List<String> filesToBeDeleted = Lists.newArrayList();
     private final String configFilePath;
@@ -60,8 +60,8 @@ public class TestServer<T extends Configuration, S extends Service<T>> {
     /**
      *
      * @param testClass the class of the test
-     * @param serviceUnderTest an instance of {@link com.yammer.dropwizard.Service} under test. As explained in the documentation for
-     * {@link LifecycleService#LifecycleService(com.yammer.dropwizard.Service)} the {@link com.yammer.dropwizard.Service#run(String[])} method should not
+     * @param serviceUnderTest an instance of {@link io.dropwizard.Application} under test. As explained in the documentation for
+     * {@link LifecycleService#LifecycleService(io.dropwizard.Application)} the {@link io.dropwizard.Application#run(String[])} method should not
      *                         have been executed.
      * @param configFile the path to the config file
      * @param additionalFiles filenames of additional files to be available at the same path as the server run directory. They are expected to be found in
@@ -71,7 +71,7 @@ public class TestServer<T extends Configuration, S extends Service<T>> {
      * @return
      * @throws Exception
      */
-    public static <T extends Configuration, S extends Service<T>> TestServer<T, S>
+    public static <T extends Configuration, S extends Application<T>> TestServer<T, S>
     create(Class<?> testClass, S serviceUnderTest, final String configFile, String... additionalFiles) throws Exception {
         return new TestServer<>(testClass, new LifecycleService<>(serviceUnderTest), configFile, additionalFiles);
     }
@@ -105,7 +105,9 @@ public class TestServer<T extends Configuration, S extends Service<T>> {
 
     private void cleanUpFiles() {
         for (String filename : filesToBeDeleted) {
-            (new File(filename)).delete();
+            if (!(new File(filename)).delete()) {
+                throw new IllegalStateException("Failed to delete file");
+            }
         }
     }
 

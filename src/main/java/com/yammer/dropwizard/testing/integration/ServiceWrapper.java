@@ -16,12 +16,12 @@
 package com.yammer.dropwizard.testing.integration;
 
 
-import com.yammer.dropwizard.Service;
-import com.yammer.dropwizard.config.Bootstrap;
-import com.yammer.dropwizard.config.Configuration;
-import com.yammer.dropwizard.config.Environment;
+import io.dropwizard.Application;
+import io.dropwizard.Configuration;
+import io.dropwizard.setup.Bootstrap;
+import io.dropwizard.setup.Environment;
 
-public abstract class ServiceWrapper<C extends Configuration> extends Service<C> {
+public abstract class ServiceWrapper<C extends Configuration> extends Application<C> {
 
     @Override
     public void initialize(Bootstrap<C> bootstrap) {
@@ -33,5 +33,5 @@ public abstract class ServiceWrapper<C extends Configuration> extends Service<C>
         getDelegate().run(configuration, environment);
     }
 
-    protected abstract Service<C> getDelegate();
+    protected abstract Application<C> getDelegate();
 }

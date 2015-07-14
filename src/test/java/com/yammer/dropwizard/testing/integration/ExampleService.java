@@ -15,9 +15,9 @@
  */
 package com.yammer.dropwizard.testing.integration;
 
-import com.yammer.dropwizard.Service;
-import com.yammer.dropwizard.config.Bootstrap;
-import com.yammer.dropwizard.config.Environment;
+import io.dropwizard.Application;
+import io.dropwizard.setup.Bootstrap;
+import io.dropwizard.setup.Environment;
 import org.eclipse.jetty.http.MimeTypes;
 
 import javax.ws.rs.GET;
@@ -26,24 +26,25 @@ import javax.ws.rs.Produces;
 import java.io.File;
 import java.util.Scanner;
 
-public class ExampleService extends Service<ExampleConfiguration> {
+public class ExampleService extends Application<ExampleConfiguration> {
 
     @Override
     public void initialize(Bootstrap<ExampleConfiguration> bootstrap) {
-        bootstrap.setName("example-service");
+
     }
 
     @Override
     public void run(ExampleConfiguration configuration, Environment environment) throws Exception {
         File valueFile = new File(configuration.getFilename());
-        Scanner valueScanner = new Scanner(valueFile);
-        final String value = valueScanner.next();
-
-        environment.addResource(new TestResource(value));
+        final String value;
+        try (Scanner valueScanner = new Scanner(valueFile)) {
+            value = valueScanner.next();
+        }
+        environment.jersey().register(new TestResource(value));
     }
 
     @Path("/")
-    @Produces(MimeTypes.TEXT_PLAIN)
+    @Produces("text/plain")
     public class TestResource {
         private final String value;
 

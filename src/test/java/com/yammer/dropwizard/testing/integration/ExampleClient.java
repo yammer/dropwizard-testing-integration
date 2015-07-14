@@ -15,18 +15,19 @@
  */
 package com.yammer.dropwizard.testing.integration;
 
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.WebResource;
+
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.WebTarget;
 
 public class ExampleClient {
-    private final WebResource rootResource;
+    private final WebTarget rootResource;
 
     public ExampleClient(Client client, String testServiceUrl) {
-        this.rootResource = client.resource(testServiceUrl);
+        this.rootResource = client.target(testServiceUrl);
     }
 
     public String getValue() {
-        return rootResource.get(String.class);
+        return rootResource.request().buildGet().invoke(String.class);
     }
 
 }

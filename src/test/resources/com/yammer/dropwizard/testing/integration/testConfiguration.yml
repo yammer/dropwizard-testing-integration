@@ -1,16 +1,10 @@
 filename: ./value.txt
 
-http:
-  port: 20190
-  maxIdleTime: 1h
-  adminPort: 20191
-  connectorType: nonblocking
-  requestLog:
-    console:
-      enabled: false
-    file:
-      enabled: true
-      currentLogFilename: /tmp/secretie/request.log
-      archivedLogFilenamePattern: /tmp/secretie/request-%d.log
-  gzip:
-    enabled: false
+server:
+  applicationConnectors:
+    - type: http
+      port: 20190
+      idleTimeout: 1h
+  adminConnectors:
+    - type: http
+      port: 20191

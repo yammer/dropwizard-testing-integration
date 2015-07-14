@@ -15,13 +15,12 @@
  */
 package com.yammer.dropwizard.testing.integration;
 
-
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientHandlerException;
+import org.glassfish.jersey.client.JerseyClientBuilder;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.ws.rs.ProcessingException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Scanner;
@@ -41,7 +40,7 @@ public class TestServerIntegrationTest {
     public void setup() throws Exception {
         testServer = TestServer.create(TestServerIntegrationTest.class, new ExampleService(), TEST_CONFIG, VALUE_FILE);
         testServer.start();
-        testClient = new ExampleClient(new Client(), TEST_SERVICE_URL);
+        testClient = new ExampleClient(JerseyClientBuilder.createClient(), TEST_SERVICE_URL);
     }
 
     @After
@@ -56,7 +55,7 @@ public class TestServerIntegrationTest {
         assertThat(testClient.getValue(), is(equalTo(getExpectedValue())));
     }
 
-    @Test(expected = ClientHandlerException.class)
+    @Test(expected = ProcessingException.class)
     public void after_server_stopped_it_is_no_longer_running() throws Exception {
         testServer.stop();
 
